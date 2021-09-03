@@ -1,36 +1,55 @@
-$(document).ready(function(){
-//code goes here
+$(document).ready(function () {
+  $("#six .description").val(localStorage.getItem("6"));
+  $("#seven .description").val(localStorage.getItem("7"));
+  $("#eight .description").val(localStorage.getItem("8"));
+  $("#nine .description").val(localStorage.getItem("9"));
+  $("#ten .description").val(localStorage.getItem("10"));
+  $("#eleven .description").val(localStorage.getItem("11"));
+  $("#twelve .description").val(localStorage.getItem("12"));
+  $("#one .description").val(localStorage.getItem("1"));
+  $("#two .description").val(localStorage.getItem("2"));
+  $("#three .description").val(localStorage.getItem("3"));
+  $("#four .description").val(localStorage.getItem("4"));
+  $("#five .description").val(localStorage.getItem("5"));
 
-function saveTask(){
-    alert('saved');
-    //get stuff user put in textarea
+  function saveTask() {
+    alert("saved");
+    var value = $(this).siblings(".description").val();
+    var time = $(this).parent().attr("data-time");
+    // save in localStorage
+    localStorage.setItem(time, value);
+  }
 
-    //save that to localstorage
+  //user clicks save button
+  $(".saveBtn").on("click", saveTask);
+  function updateRowColor() {
+    var currentHour = moment().hours();
 
-    //show message of added text to user
+    // loop over time blocks
+    $(".time-block").each(function () {
+      var blockHour = parseInt($(this).attr("id").split("-")[1]);
 
-    //hide message after so many seconds.
-};
+      // check if we've moved past this time
+      if (blockHour < currentHour) {
+        $(this).addClass("past");
+      } else if (blockHour === currentHour) {
+        $(this).removeClass("past");
+        $(this).addClass("present");
+      } else {
+        $(this).removeClass("past");
+        $(this).removeClass("present");
+        $(this).addClass("future");
+      }
+    });
+  }
 
-  
+  //use interval to update row color
+  //color rows based on the time of the day
+  updateRowColor();
 
-
-//user clicks save button 
-$('.saveBtn').on('click', saveTask);
-function updateRowColor(){
-    //set variable to current hour
-    //loop over each row of the class (time-block)
-    // find row time by using data attribute (9 < 21)
-    //add the past class to $(this).addClass('past');
-};
-
-
-//use interval to update row color
-//color rows based on the time of the day
-updateRowColor();
-
-//load data from local storage and put it into the correct row
-// #hour9 textarea to value of localstorage key number "hour-9"
-// #hour10 textarea to value of localstorage key number "hour-10"
-//display current date - moment (get document by id)
+  //load data from local storage and put it into the correct row
+  // #hour9 textarea to value of localstorage key number "hour-9"
+  // #hour10 textarea to value of localstorage key number "hour-10"
+  //display current date - moment (get document by id)
+    $("#currentDay").text(moment().format("dddd, MMMM Do"));
 });
